@@ -1,25 +1,13 @@
 package ch.bs.statistik.indicators
 
-import ch.bs.statistik.indicators.Controller.{Circuit, LoadChartsAction}
-import ch.bs.statistik.indicators.model.AppModel
-import diode.react.ModelProxy
-import japgolly.scalajs.react.vdom.prefix_<^._
-import japgolly.scalajs.react.{ReactComponentB, ReactDOM, _}
+import ch.bs.statistik.indicators.Controller.Circuit
+import ch.bs.statistik.indicators.components.PageComponent
+import japgolly.scalajs.react.ReactDOM
 import org.scalajs.dom._
 
 import scala.scalajs.js
 
 object MainApp extends js.JSApp {
-
-  val PageComponent = ReactComponentB[ModelProxy[AppModel]]("PageComponent")
-    .render_P(props => {
-      val charts = props.value.charts
-      <.ul(charts.map(chart => <.li(s"Chart ${chart.id}, ${chart.title}")))
-    })
-    .componentDidMount($ => {
-      $.props.dispatch(LoadChartsAction())
-    })
-    .build
 
   def main() = {
 

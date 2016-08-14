@@ -14,7 +14,11 @@ object Controller {
       case a @ LoadChartsAction() =>
         println(s"Handling action $a")
         // TODO: Load from JSON
-        val charts = List(Chart(1, "one"), Chart(2, "two"), Chart(3, "three"))
+        val charts = List(
+          Chart(1, "one", Set("Banana", "Apple", "Pear")),
+          Chart(2, "two", Set("Lemon", "Banana", "Pear", "Raspberry")),
+          Chart(3, "three", Set("Coconut", "Bike", "Apple"))
+        )
         updated(charts)
     }
 

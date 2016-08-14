@@ -4,7 +4,7 @@ object model {
 
   type ChartId = Int
 
-  case class Chart(id: ChartId, title: String)
+  case class Chart(id: ChartId, title: String, keywords: Set[String] = Set())
 
   case class AppModel(charts: List[Chart] = List())
 
