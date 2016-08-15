@@ -12,13 +12,20 @@ object PageComponent {
 
   private val component = ReactComponentB[Props](PageComponent.getClass.getSimpleName)
     .render_P(props => {
-      val charts = props.proxy.value.charts
-      // zoom in to a union of all keywords across all charts
-      val keywordModelProxy = props.proxy.zoom(m => m.charts.flatMap(_.keywords).toSet)
-      <.div(
-        KeywordSelectorComponent(keywordModelProxy),
-        <.ul(charts.map(chart => <.li(s"Chart ${chart.id}, ${chart.title}, ${chart.keywords.mkString(", ")}")))
-      )
+
+      val keywordSelector = {
+        // zoom in to a union of all keywords across all charts
+        val proxy = props.proxy.zoom(m => m.charts.flatMap(_.keywords).toSet)
+        KeywordSelectorComponent(proxy)
+      }
+
+      val chartGrid = {
+        // zoom in to a List of charts
+        val proxy = props.proxy.zoom(m => m.charts)
+        ChartGridComponent(proxy)
+      }
+
+      <.div(keywordSelector, chartGrid)
     })
     .componentDidMount($ => {
       $.props.proxy.dispatch(LoadChartsAction())

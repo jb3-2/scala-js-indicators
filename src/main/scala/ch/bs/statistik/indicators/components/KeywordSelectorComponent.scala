@@ -8,7 +8,7 @@ object KeywordSelectorComponent {
 
   case class Props(proxy: ModelProxy[Set[String]])
 
-  private val component = ReactComponentB[Props](KeywordSelectorComponent.getClass.getSimpleName)
+  private val component = ReactComponentB[Props](ChartGridComponent.getClass.getSimpleName)
     .render_P(props => {
       val keywords = props.proxy.value
       <.div(s"${keywords.mkString(", ")}")
