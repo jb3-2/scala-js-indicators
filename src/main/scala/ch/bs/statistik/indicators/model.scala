@@ -6,6 +6,6 @@ object model {
 
   case class Chart(id: ChartId, title: String, keywords: Set[String] = Set())
 
-  case class AppModel(charts: List[Chart] = List())
+  case class AppModel(charts: List[Chart] = List(), selectedKeywords: Set[String] = Set(), filteredCharts: List[Chart] = List())
 
 }

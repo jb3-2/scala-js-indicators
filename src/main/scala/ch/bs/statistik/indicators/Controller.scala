@@ -8,9 +8,9 @@ object Controller {
 
   case class LoadChartsAction() extends Action
 
-  class LoadChartsHandler[AppModel](modelRW: ModelRW[AppModel, List[Chart]]) extends ActionHandler(modelRW) {
+  class LoadChartsHandler[M](modelRW: ModelRW[M, List[Chart]]) extends ActionHandler(modelRW) {
 
-    override protected def handle = {
+    override def handle = {
       case a @ LoadChartsAction() =>
         println(s"Handling action $a")
         // TODO: Load from JSON
@@ -24,17 +24,42 @@ object Controller {
 
   }
 
+  case class FilterByKeywordAction(keywords: Set[String]) extends Action
+
+  class FilterChartsHandler[M](modelRW: ModelRW[M, AppModel]) extends ActionHandler(modelRW) {
+
+    override def handle = {
+      case FilterByKeywordAction(keywords) =>
+
+        val oldAppModel = value
+        val filteredCharts = oldAppModel.charts.filter { chart =>
+          keywords.intersect(chart.keywords).size == keywords.size
+        }
+
+        val newAppModel = oldAppModel.copy(selectedKeywords = keywords, filteredCharts = filteredCharts)
+
+        updated(newAppModel)
+    }
+
+  }
+
   object Circuit extends Circuit[AppModel] with ReactConnector[AppModel] {
 
     override protected def initialModel = AppModel()
 
-    override protected def actionHandler = {
+    private val loadChartsHandler = {
       val readModel = (originalModel: AppModel) => originalModel.charts
-      val writeModel = (originalModel: AppModel, updatedCharts: List[Chart]) => originalModel.copy(charts = updatedCharts)
+      val writeModel = (originalModel: AppModel, updatedCharts: List[Chart]) =>
+        originalModel.copy(charts = updatedCharts, filteredCharts = updatedCharts)
       val modelRW = zoomRW(readModel)(writeModel)
       new LoadChartsHandler[AppModel](modelRW)
     }
 
+    private val filterChartsHandler = {
+      new FilterChartsHandler[AppModel](zoomRW(m => m)((m, v) => v))
+    }
+
+    override protected def actionHandler = composeHandlers(loadChartsHandler, filterChartsHandler)
   }
 
 }

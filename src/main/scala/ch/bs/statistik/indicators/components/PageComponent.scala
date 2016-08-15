@@ -15,14 +15,14 @@ object PageComponent {
 
       val keywordSelector = {
         // zoom in to a union of all keywords across all charts
-        val proxy = props.proxy.zoom(m => m.charts.flatMap(_.keywords).toSet)
-        KeywordSelectorComponent(proxy)
+        val allKeywords = props.proxy.zoom(m => m.charts.flatMap(_.keywords).toSet)
+        KeywordSelectorComponent(allKeywords)
       }
 
       val chartGrid = {
         // zoom in to a List of charts
-        val proxy = props.proxy.zoom(m => m.charts)
-        ChartGridComponent(proxy)
+        val filteredCharts = props.proxy.zoom(m => m.filteredCharts)
+        ChartGridComponent(filteredCharts)
       }
 
       <.div(keywordSelector, chartGrid)

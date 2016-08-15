@@ -1,6 +1,5 @@
 package ch.bs.statistik.indicators.components
 
-import ch.bs.statistik.indicators.components.KeywordSelectorComponent.Props
 import ch.bs.statistik.indicators.model.Chart
 import diode.react.ModelProxy
 import japgolly.scalajs.react.ReactComponentB
@@ -13,7 +12,7 @@ object ChartGridComponent {
   private val component = ReactComponentB[Props](ChartGridComponent.getClass.getSimpleName)
     .render_P(props => {
       val charts = props.proxy.value
-      <.div(charts.map(chart => <.div(s"id: ${chart.id}, title: ${chart.title}")))
+      <.div(charts.map(chart => <.div(s"id: ${chart.id}, title: ${chart.title}, keywords: ${chart.keywords}")))
     })
     .build
 
