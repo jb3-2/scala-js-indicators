@@ -11,7 +11,13 @@ object KeywordSelectorComponent {
   private val component = ReactComponentB[Props](ChartGridComponent.getClass.getSimpleName)
     .render_P(props => {
       val keywords = props.proxy.value
-      <.div(s"${keywords.mkString(", ")}")
+      //<.div(s"${keywords.mkString(", ")}")
+      <.div(
+        <.select(
+          //keywords.map(<.option(^.value:=_, _))
+          keywords.map(keyword => <.option(^.value:=keyword, keyword))
+        )
+      )
     })
     .build
 
